@@ -1,9 +1,5 @@
 # 🚀 Productivity Dashboard
-
-<p align="center">
-  <img src="./preview.png" alt="Productivity Dashboard Preview" width="100%">
-</p>
-
+ 
 <p align="center">
   A modern and feature-rich <strong>Productivity Dashboard</strong> built with <strong>HTML5</strong>, <strong>CSS3</strong>, and <strong>Vanilla JavaScript</strong>.
 </p>
