@@ -1,5 +1,9 @@
 # 🚀 Productivity Dashboard
- 
+
+A modern and feature-rich **Productivity Dashboard** built with **HTML5**, **CSS3**, and **Vanilla JavaScript**.
+
+Organize tasks, manage goals, improve focus, and stay productive with an intuitive user experience.
+
 ---
 
 # ✨ Features
@@ -88,8 +92,7 @@ productivity-dashboard
 ├── index.html
 ├── style.css
 ├── script.js
-├── assets/
-└── README.md
+├── README.md
 ```
 
 ---
@@ -145,12 +148,14 @@ The primary goal was to improve problem-solving, DOM manipulation, application s
 
 # 🙏 Acknowledgements
 
-This project was built as part of my JavaScript learning journey.
+This project was developed as part of my learning journey through the **Sheryians Coding School – Cohort 3.0** curriculum.
 
 Special thanks to:
 
-- **Sheryians Coding School** — for providing high-quality web development learning resources.
-- **@devendra.codes** — for guidance and practical assignments that helped strengthen JavaScript concepts.
+- **Sheryians Coding School** — for designing a structured, project-based curriculum that emphasizes practical web development skills.
+- **@devendra.codes** — for mentorship, assignment guidance, and hands-on JavaScript learning.
+
+The implementation, code structure, and project customization in this repository were completed as part of my learning journey.
 
 ---
 
@@ -165,6 +170,4 @@ Full Stack Web Developer
 
 ---
 
-If you found this project helpful, consider giving it a ⭐ on GitHub.
-
-Happy Coding! 🚀
+⭐ If you found this project useful, consider giving it a **Star** on GitHub.
