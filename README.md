@@ -1,13 +1,5 @@
 # 🚀 Productivity Dashboard
  
-<p align="center">
-  A modern and feature-rich <strong>Productivity Dashboard</strong> built with <strong>HTML5</strong>, <strong>CSS3</strong>, and <strong>Vanilla JavaScript</strong>.
-</p>
-
-<p align="center">
-  Organize tasks, manage goals, improve focus, and stay productive with an intuitive user experience.
-</p>
-
 ---
 
 # ✨ Features
