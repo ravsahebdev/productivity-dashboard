@@ -14,7 +14,7 @@ const LS = {
 };
 
 /* ---------- Toast ---------- */
-const toastEl = document.getElementById("toast");
+const toastEl = document.querySelector("#toast");
 let toastTimer;
 function toast(msg) {
     toastEl.textContent = msg;
@@ -51,11 +51,11 @@ document.querySelectorAll("[data-back]").forEach((b) =>
 /* =========================================================
    2. Clock + greeting + dynamic background
    ========================================================= */
-const headerDate = document.getElementById("headerDate");
-const headerTime = document.getElementById("headerTime");
-const wTime = document.getElementById("wTime");
-const wDate = document.getElementById("wDate");
-const greetText = document.getElementById("greetText");
+const headerDate = document.querySelector("#headerDate");
+const headerTime = document.querySelector("#headerTime");
+const wTime = document.querySelector("#wTime");
+const wDate = document.querySelector("#wDate");
+const greetText = document.querySelector("#greetText");
 
 function pad(n) { return n < 10 ? "0" + n : "" + n; }
 
@@ -113,8 +113,8 @@ setInterval(() => {
 /* =========================================================
    3. Theme toggle (dark/light)
    ========================================================= */
-const themeToggle = document.getElementById("themeToggle");
-const wThemeToggle = document.getElementById("wThemeToggle");
+const themeToggle = document.querySelector("#themeToggle");
+const wThemeToggle = document.querySelector("#wThemeToggle");
 function applyTheme(t) {
     document.documentElement.setAttribute("data-theme", t);
     LS.set("theme", t);
@@ -132,14 +132,14 @@ wThemeToggle.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key
 /* =========================================================
    4. Todo List (add/delete/complete/important + LocalStorage)
    ========================================================= */
-const todoForm = document.getElementById("todoForm");
-const todoInput = document.getElementById("todoInput");
-const todoListEl = document.getElementById("todoList");
-const todoEmpty = document.getElementById("todoEmpty");
-const tasksDoneEl = document.getElementById("tasksDone");
-const tasksTotalEl = document.getElementById("tasksTotal");
-const focusBar = document.getElementById("focusBar");
-const focusValue = document.getElementById("focusValue");
+const todoForm = document.querySelector("#todoForm");
+const todoInput = document.querySelector("#todoInput");
+const todoListEl = document.querySelector("#todoList");
+const todoEmpty = document.querySelector("#todoEmpty");
+const tasksDoneEl = document.querySelector("#tasksDone");
+const tasksTotalEl = document.querySelector("#tasksTotal");
+const focusBar = document.querySelector("#focusBar");
+const focusValue = document.querySelector("#focusValue");
 let todos = LS.get("todos", []);
 
 function saveTodos() { LS.set("todos", todos); renderTodos(); updateStats(); }
@@ -197,12 +197,12 @@ function escapeHtml(s) {
 /* =========================================================
    5. Daily Goals
    ========================================================= */
-const goalForm = document.getElementById("goalForm");
-const goalInput = document.getElementById("goalInput");
-const goalListEl = document.getElementById("goalList");
-const goalEmpty = document.getElementById("goalEmpty");
-const goalsBar = document.getElementById("goalsBar");
-const goalsProgress = document.getElementById("goalsProgress");
+const goalForm = document.querySelector("#goalForm");
+const goalInput = document.querySelector("#goalInput");
+const goalListEl = document.querySelector("#goalList");
+const goalEmpty = document.querySelector("#goalEmpty");
+const goalsBar = document.querySelector("#goalsBar");
+const goalsProgress = document.querySelector("#goalsProgress");
 let goals = LS.get("goals", []);
 
 function saveGoals() { LS.set("goals", goals); renderGoals(); updateStats(); }
@@ -265,11 +265,11 @@ function updateStats() {
 
     // Points = 10 per completed task + 5 per completed goal
     const pts = done * 10 + goalsDone * 5;
-    document.getElementById("totalPoints").textContent = pts;
+    document.querySelector("#totalPoints").textContent = pts;
 
     // Streak: increment when any task completed today (persisted)
     const streak = maybeUpdateStreak(done + goalsDone);
-    document.getElementById("streakDays").textContent = streak;
+    document.querySelector("#streakDays").textContent = streak;
 }
 function maybeUpdateStreak(activityCount) {
     const today = new Date().toDateString();
@@ -296,8 +296,8 @@ function maybeUpdateStreak(activityCount) {
 /* =========================================================
    7. Daily Planner (auto-save)
    ========================================================= */
-const plannerGrid = document.getElementById("plannerGrid");
-const plannerHint = document.getElementById("plannerHint");
+const plannerGrid = document.querySelector("#plannerGrid");
+const plannerHint = document.querySelector("#plannerHint");
 const plannerData = LS.get("planner", {});
 const slots = [
     "06:00 AM", "07:00 AM", "08:00 AM", "09:00 AM",
@@ -330,9 +330,9 @@ const pomoState = {
     running: false,
     interval: null,
 };
-const pomoTimeEl = document.getElementById("pomoTime");
-const pomoRing = document.getElementById("pomoRing");
-const wPomoTime = document.getElementById("wPomoTime");
+const pomoTimeEl = document.querySelector("#pomoTime");
+const pomoRing = document.querySelector("#pomoRing");
+const wPomoTime = document.querySelector("#wPomoTime");
 const RING_CIRC = 2 * Math.PI * 98;
 pomoRing.style.strokeDasharray = RING_CIRC;
 pomoRing.style.strokeDashoffset = 0;
@@ -375,12 +375,12 @@ function resetPomo() {
     renderPomo();
 }
 renderPomo();
-document.getElementById("pomoStart").addEventListener("click", startPomo);
-document.getElementById("pomoPause").addEventListener("click", pausePomo);
-document.getElementById("pomoReset").addEventListener("click", resetPomo);
-document.getElementById("wPomoPlay").addEventListener("click", startPomo);
-document.getElementById("wPomoPause").addEventListener("click", pausePomo);
-document.getElementById("wPomoReset").addEventListener("click", resetPomo);
+document.querySelector("#pomoStart").addEventListener("click", startPomo);
+document.querySelector("#pomoPause").addEventListener("click", pausePomo);
+document.querySelector("#pomoReset").addEventListener("click", resetPomo);
+document.querySelector("#wPomoPlay").addEventListener("click", startPomo);
+document.querySelector("#wPomoPause").addEventListener("click", pausePomo);
+document.querySelector("#wPomoReset").addEventListener("click", resetPomo);
 
 /* =========================================================
    9. Motivation quotes (ZenQuotes via CORS proxy + fallback)
@@ -416,10 +416,10 @@ async function fetchQuote() {
         return randomFallback();
     }
 }
-const motivQuote = document.getElementById("motivQuote");
-const motivAuthor = document.getElementById("motivAuthor");
-const quoteText = document.getElementById("quoteText");
-const quoteAuthor = document.getElementById("quoteAuthor");
+const motivQuote = document.querySelector("#motivQuote");
+const motivAuthor = document.querySelector("#motivAuthor");
+const quoteText = document.querySelector("#quoteText");
+const quoteAuthor = document.querySelector("#quoteAuthor");
 async function loadMotivationQuote() {
     motivQuote.textContent = "Loading a fresh quote…";
     motivAuthor.textContent = "—";
@@ -429,7 +429,7 @@ async function loadMotivationQuote() {
     quoteText.textContent = `“${q.q}”`;
     quoteAuthor.textContent = `— ${q.a}`;
 }
-document.getElementById("motivRefresh").addEventListener("click", loadMotivationQuote);
+document.querySelector("#motivRefresh").addEventListener("click", loadMotivationQuote);
 // initial home-banner quote
 loadMotivationQuote();
 
@@ -438,10 +438,10 @@ loadMotivationQuote();
    ========================================================= */
 const wxCache = LS.get("weather", null);
 const PUNE = { lat: 18.5204, lon: 73.8567, name: "Pune, Maharashtra" };
-const wTemp = document.getElementById("wTemp");
-const wCond = document.getElementById("wCond");
-const wLoc = document.getElementById("wLoc");
-const weatherPanel = document.getElementById("weatherPanel");
+const wTemp = document.querySelector("#wTemp");
+const wCond = document.querySelector("#wCond");
+const wLoc = document.querySelector("#wLoc");
+const weatherPanel = document.querySelector("#weatherPanel");
 
 const CODE_MAP = {
     0: { desc: "Clear sky", emoji: "☀️" },
@@ -584,7 +584,7 @@ async function loadWeather(forceGeo = false) {
     );
 }
 loadWeather();
-document.getElementById("weatherRefresh").addEventListener("click", () => loadWeather(true));
+document.querySelector("#weatherRefresh").addEventListener("click", () => loadWeather(true));
 
 /* =========================================================
    Initial renders
