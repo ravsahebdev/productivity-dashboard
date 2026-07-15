@@ -192,17 +192,16 @@ function renderTodos() {
     sorted.forEach((t) => {
         const li = document.createElement("li");
         li.className = `todo-item${t.done ? " done" : ""}${t.important ? " important" : ""}`;
-        li.dataset.testid = `todo-item-${t.id}`;
         li.innerHTML = `
-            <button class="todo-check" data-action="toggle" aria-label="Toggle complete" data-testid="todo-toggle-${t.id}">
+            <button class="todo-check" data-action="toggle" aria-label="Toggle complete">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
             <span class="todo-text">${escapeHtml(t.text)}</span>
             <div class="todo-actions">
-                <button class="todo-btn star${t.important ? " active" : ""}" data-action="star" aria-label="Mark important" data-testid="todo-star-${t.id}">
+                <button class="todo-btn star${t.important ? " active" : ""}" data-action="star" aria-label="Mark important">
                     <svg viewBox="0 0 24 24" fill="${t.important ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9"></polygon></svg>
                 </button>
-                <button class="todo-btn del" data-action="delete" aria-label="Delete" data-testid="todo-del-${t.id}">
+                <button class="todo-btn del" data-action="delete" aria-label="Delete">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
                 </button>
             </div>`;
@@ -248,12 +247,12 @@ function renderGoals() {
         const li = document.createElement("li");
         li.className = `todo-item${g.done ? " done" : ""}`;
         li.innerHTML = `
-            <button class="todo-check" data-action="toggle" aria-label="Toggle complete" data-testid="goal-toggle-${g.id}">
+            <button class="todo-check" data-action="toggle" aria-label="Toggle complete">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
             <span class="todo-text">${escapeHtml(g.text)}</span>
             <div class="todo-actions">
-                <button class="todo-btn del" data-action="delete" aria-label="Delete" data-testid="goal-del-${g.id}">
+                <button class="todo-btn del" data-action="delete" aria-label="Delete">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
                 </button>
             </div>`;

@@ -185,6 +185,7 @@ html[data-theme="light"] {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    /* outline: 1px solid pink; */
 }
 
 html,
@@ -431,7 +432,11 @@ html[data-theme="light"] .nav-item:hover {
     transition: transform 240ms cubic-bezier(0.5, 1.4, 0.6, 1);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
- 
+
+html[data-theme="light"] .toggle-track {
+    background: linear-gradient(135deg, #7c5cff, #9c7bff);
+}
+
 html[data-theme="light"] .toggle-track {
     background: rgba(124, 92, 255, 0.85);
 }
