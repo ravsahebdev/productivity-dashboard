@@ -50,6 +50,7 @@ function initWelcome() {
     }
     // naam nahi mila localStorage me toh popup dikhao
     welcomeOverlay.classList.remove("hidden");
+    // welcomeOverlay.style.display = "flex"; -- class approach use kar rahe hain, isko hata diya
     setTimeout(() => welcomeNameInput.focus(), 300);
 }
 
@@ -180,16 +181,23 @@ const focusBar = document.querySelector("#focusBar");
 const focusValue = document.querySelector("#focusValue");
 let todos = LS.get("todos", []);
 
-function saveTodos() { LS.set("todos", todos); renderTodos(); updateStats(); }
+function saveTodos() {
+    LS.set("todos", todos);
+    console.log("todos saved:", todos.length);
+    renderTodos();
+    updateStats();
+}
 function renderTodos() {
     todoListEl.innerHTML = "";
     // important wale sabse upar, phir pending, done wale sabse neeche
-    const sorted = [...todos].sort((a, b) => {
+    const sortedTodos = [...todos].sort((a, b) => {
         if (a.done !== b.done) return a.done ? 1 : -1;
         if (a.important !== b.important) return a.important ? -1 : 1;
         return 0;
     });
-    sorted.forEach((t) => {
+    // pehle .sort() ka result seedha yaha map karta tha but list update pe issue aa raha tha, ab loop se kar rahe
+    // const sorted2 = sortedTodos.map(t => t); -- isko use nahi kar rahe abhi
+    for (const t of sortedTodos) {
         const li = document.createElement("li");
         li.className = `todo-item${t.done ? " done" : ""}${t.important ? " important" : ""}`;
         li.innerHTML = `
@@ -215,7 +223,7 @@ function renderTodos() {
             todos = todos.filter((x) => x.id !== t.id); saveTodos();
         });
         todoListEl.appendChild(li);
-    });
+    }
     todoEmpty.classList.toggle("show", todos.length === 0);
 }
 todoForm.addEventListener("submit", (e) => {
@@ -336,7 +344,9 @@ const slots = [
     "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM",
     "06:00 PM", "07:00 PM", "08:00 PM", "09:00 PM"
 ];
-slots.forEach((s) => {
+// hourly slots chahiye the pehle 24 ghante ke, but itna scroll karna padta tha to 6AM-9PM tak hi rakh diya
+// const slots = Array.from({length: 24}, (_, i) => `${i}:00`); -- ye purana approach tha
+for (const s of slots) {
     const el = document.createElement("div");
     el.className = "planner-slot";
     el.innerHTML = `<div class="planner-time">${s}</div><textarea placeholder="Plan something…" data-slot="${s}"></textarea>`;
@@ -350,7 +360,7 @@ slots.forEach((s) => {
         ta._t = setTimeout(() => (plannerHint.textContent = "Auto-saved"), 900);
     });
     plannerGrid.appendChild(el);
-});
+}
 
 // pomodoro timer, default 25 min rakha hai, dono jagah (widget + full page) sync rahega
 const savedDuration = LS.get("pomodoro-duration", 25 * 60);
@@ -486,6 +496,7 @@ async function fetchQuote() {
         return { q: data.quote, a: data.author };
 
     } catch (err) {
+        console.warn("quote api down, using fallback list", err);
         return randomFallback();
     }
 }
@@ -632,7 +643,10 @@ async function loadWeather(forceGeo = false) {
             const data = await fetchWeather(la, lo);
             weatherState = { loading: false, error: null, data, location: name };
             LS.set("wx-loc", { lat: la, lon: lo, name });
+            // LS.set("wx-loc", {lat, lon, name}); -- pehle destructure karke bhi try kiya tha, upar wala hi rakha
+            console.log("weather updated for", name);
         } catch (e) {
+            console.warn("weather fetch failed:", e);
             weatherState = { loading: false, error: "Could not load weather.", data: null, location: name };
         }
         updateWidgetWeather();
