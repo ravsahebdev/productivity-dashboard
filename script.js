@@ -1,4 +1,4 @@
-/* ---------- LocalStorage helpers ---------- */
+// chhote localStorage helpers, get/set safely (JSON parse fail na ho isliye try catch)
 const LS = {
     get(key, fallback) {
         try {
@@ -9,11 +9,11 @@ const LS = {
         }
     },
     set(key, value) {
-        try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+        try { localStorage.setItem(key, JSON.stringify(value)); } catch { }
     },
 };
 
-/* ---------- Toast ---------- */
+// -- toast notification --
 const toastEl = document.querySelector("#toast");
 let toastTimer;
 function toast(msg) {
@@ -23,9 +23,53 @@ function toast(msg) {
     toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2400);
 }
 
-/* =========================================================
-   1. Router (SPA views)
-   ========================================================= */
+// welcome popup -> pehli baar aane wale user se naam pucho, phir localStorage me save
+const welcomeOverlay = document.querySelector("#welcomeOverlay");
+const welcomeForm = document.querySelector("#welcomeForm");
+const welcomeNameInput = document.querySelector("#welcomeNameInput");
+const welcomeError = document.querySelector("#welcomeError");
+const usernameEl = document.querySelector("#username");
+const avatarEl = document.querySelector(".avatar");
+
+function applyUsername(name) {
+    usernameEl.textContent = name;
+    if (avatarEl) {
+        avatarEl.setAttribute("title", name);
+        const initialSpan = avatarEl.querySelector("span");
+        if (initialSpan) initialSpan.textContent = name.trim().charAt(0).toUpperCase() || "U";
+    }
+}
+
+function initWelcome() {
+    const savedName = LS.get("username", null);
+    if (savedName && String(savedName).trim()) {
+        // already naam save hai to popup skip, seedha greet kardo
+        applyUsername(savedName);
+        welcomeOverlay.classList.add("hidden");
+        return;
+    }
+    // naam nahi mila localStorage me toh popup dikhao
+    welcomeOverlay.classList.remove("hidden");
+    setTimeout(() => welcomeNameInput.focus(), 300);
+}
+
+welcomeForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = welcomeNameInput.value.trim();
+    if (!name) {
+        welcomeError.textContent = "Please enter your name to continue.";
+        welcomeNameInput.focus();
+        return;
+    }
+    welcomeError.textContent = "";
+    LS.set("username", name);
+    applyUsername(name);
+    welcomeOverlay.classList.add("hidden");
+});
+
+initWelcome();
+
+// ---- simple SPA router, sidebar click pe view switch hota hai ----
 const views = document.querySelectorAll(".view");
 const navBtns = document.querySelectorAll("[data-view]");
 function showView(name) {
@@ -33,7 +77,7 @@ function showView(name) {
     document.querySelectorAll(".nav-item").forEach((n) => {
         n.classList.toggle("active", n.dataset.view === name);
     });
-    // Scroll main to top for feature views
+    // view change hote hi scroll top pe le aao warna weird lagta hai
     document.querySelector(".main").scrollTo({ top: 0, behavior: "smooth" });
     if (name === "motivation") loadMotivationQuote();
     if (name === "weather") renderWeatherView();
@@ -48,9 +92,7 @@ document.querySelectorAll("[data-back]").forEach((b) =>
     b.addEventListener("click", () => showView("home"))
 );
 
-/* =========================================================
-   2. Clock + greeting + dynamic background
-   ========================================================= */
+// clock update + greeting msg + time ke hisab se bg change -- sab yaha
 const headerDate = document.querySelector("#headerDate");
 const headerTime = document.querySelector("#headerTime");
 const wTime = document.querySelector("#wTime");
@@ -83,7 +125,7 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-/* Dynamic background: morning/afternoon/evening/night */
+// bg 4 category me change hota hai based on current hour
 function getTimeOfDay() {
     const h = new Date().getHours();
     if (h >= 5 && h < 12) return "morning";
@@ -92,27 +134,25 @@ function getTimeOfDay() {
     return "night";
 }
 function applyBg(name) {
-    document.body.classList.remove("bg-morning", "bg-afternoon", "bg-evening", "bg-night");
+    document.body.classList.remove("bg-morning", "bg-afternoon", "bg-evening", "bg-night", "bg-rain", "bg-nature");
     document.body.classList.add(`bg-${name}`);
-    document.querySelectorAll("#bgSwatches .sw").forEach((s) =>
+    document.querySelectorAll("#bgGallery .bg-thumb").forEach((s) =>
         s.classList.toggle("active", s.dataset.bg === name)
     );
     LS.set("bg-override", name);
 }
-// initial: user override wins, else auto
+// agar user ne manually bg select kiya hai to wahi chalega, warna auto detect
 applyBg(LS.get("bg-override", null) || getTimeOfDay());
-document.querySelectorAll("#bgSwatches .sw").forEach((s) =>
+document.querySelectorAll("#bgGallery .bg-thumb").forEach((s) =>
     s.addEventListener("click", () => applyBg(s.dataset.bg))
 );
-// re-check auto every 10 min if user hasn't overridden manually since last hour
+// 10-10 min me check karte raho, agar override nahi hai to bg update hota rahe
 setInterval(() => {
     const override = LS.get("bg-override", null);
     if (!override) applyBg(getTimeOfDay());
 }, 10 * 60 * 1000);
 
-/* =========================================================
-   3. Theme toggle (dark/light)
-   ========================================================= */
+// -- dark/light theme toggle, dono jagah (sidebar + widget) se kaam karega --
 const themeToggle = document.querySelector("#themeToggle");
 const wThemeToggle = document.querySelector("#wThemeToggle");
 function applyTheme(t) {
@@ -129,9 +169,7 @@ themeToggle.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key 
 wThemeToggle.addEventListener("click", toggleTheme);
 wThemeToggle.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleTheme(); } });
 
-/* =========================================================
-   4. Todo List (add/delete/complete/important + LocalStorage)
-   ========================================================= */
+// TODO LIST -- add, delete, complete, important sab isi block me hai
 const todoForm = document.querySelector("#todoForm");
 const todoInput = document.querySelector("#todoInput");
 const todoListEl = document.querySelector("#todoList");
@@ -145,7 +183,7 @@ let todos = LS.get("todos", []);
 function saveTodos() { LS.set("todos", todos); renderTodos(); updateStats(); }
 function renderTodos() {
     todoListEl.innerHTML = "";
-    // sort: important first, then incomplete, then done
+    // important wale sabse upar, phir pending, done wale sabse neeche
     const sorted = [...todos].sort((a, b) => {
         if (a.done !== b.done) return a.done ? 1 : -1;
         if (a.important !== b.important) return a.important ? -1 : 1;
@@ -194,9 +232,7 @@ function escapeHtml(s) {
     return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-/* =========================================================
-   5. Daily Goals
-   ========================================================= */
+// daily goals ka section, todo jaisa hi hai bas thoda simple
 const goalForm = document.querySelector("#goalForm");
 const goalInput = document.querySelector("#goalInput");
 const goalListEl = document.querySelector("#goalList");
@@ -245,16 +281,14 @@ goalForm.addEventListener("submit", (e) => {
     toast("Goal added");
 });
 
-/* =========================================================
-   6. Update global stats (Tasks / Streak / Points / Focus)
-   ========================================================= */
+// yaha pe stats calculate hote hai -- streak, points, focus % waghera
 function updateStats() {
     const done = todos.filter((t) => t.done).length;
     const total = todos.length;
     tasksDoneEl.textContent = done;
     tasksTotalEl.textContent = total;
 
-    // Focus % = ratio of completed todos + completed goals
+    // focus % = todo + goals dono ka completion ratio nikal ke
     const goalsDone = goals.filter((g) => g.done).length;
     const goalsTotal = goals.length;
     const combined = total + goalsTotal;
@@ -263,11 +297,11 @@ function updateStats() {
     focusBar.style.width = pct + "%";
     focusValue.textContent = pct + "%";
 
-    // Points = 10 per completed task + 5 per completed goal
+    // point system -> task complete = 10, goal complete = 5
     const pts = done * 10 + goalsDone * 5;
     document.querySelector("#totalPoints").textContent = pts;
 
-    // Streak: increment when any task completed today (persisted)
+    // streak wala part, localStorage me store hota hai taki refresh pe na ude
     const streak = maybeUpdateStreak(done + goalsDone);
     document.querySelector("#streakDays").textContent = streak;
 }
@@ -275,7 +309,7 @@ function maybeUpdateStreak(activityCount) {
     const today = new Date().toDateString();
     const data = LS.get("streak", { day: null, count: 0, hadActivityToday: false });
     if (data.day !== today) {
-        // new day
+        // naya din aagaya, reset karna padega
         const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
         if (data.day === yesterday.toDateString() && data.hadActivityToday) {
             data.count = data.count; // yesterday completed a task -> keep chain
@@ -293,9 +327,7 @@ function maybeUpdateStreak(activityCount) {
     return data.count || 0;
 }
 
-/* =========================================================
-   7. Daily Planner (auto-save)
-   ========================================================= */
+// daily planner -- type karte hi auto save ho jata hai, submit button nahi hai
 const plannerGrid = document.querySelector("#plannerGrid");
 const plannerHint = document.querySelector("#plannerHint");
 const plannerData = LS.get("planner", {});
@@ -321,12 +353,12 @@ slots.forEach((s) => {
     plannerGrid.appendChild(el);
 });
 
-/* =========================================================
-   8. Pomodoro Timer (25 min default) – widget + full view
-   ========================================================= */
+// pomodoro timer, default 25 min rakha hai, dono jagah (widget + full page) sync rahega
+const savedDuration = LS.get("pomodoro-duration", 25 * 60);
+
 const pomoState = {
-    total: 25 * 60,
-    remaining: 25 * 60,
+    total: savedDuration,
+    remaining: savedDuration,
     running: false,
     interval: null,
 };
@@ -337,13 +369,28 @@ const RING_CIRC = 2 * Math.PI * 98;
 pomoRing.style.strokeDasharray = RING_CIRC;
 pomoRing.style.strokeDashoffset = 0;
 
-function formatMMSS(sec) {
-    const m = Math.floor(sec / 60);
+const alarmSound = new Audio("alarm.mp3");
+alarmSound.preload = "auto";
+function playAlarm() {
+    try {
+        alarmSound.currentTime = 0;
+        alarmSound.play().catch(() => { });
+    } catch { }
+}
+
+function formatTime(sec) {
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
     const s = sec % 60;
+
+    if (h > 0) {
+        return `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+
     return `${pad(m)}:${pad(s)}`;
 }
 function renderPomo() {
-    const txt = formatMMSS(pomoState.remaining);
+    const txt = formatTime(pomoState.remaining);
     pomoTimeEl.textContent = txt;
     wPomoTime.textContent = txt;
     const progress = 1 - pomoState.remaining / pomoState.total;
@@ -359,7 +406,7 @@ function startPomo() {
             pomoState.remaining = 0;
             renderPomo();
             toast("Pomodoro complete! Take a break ☕");
-            try { new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=").play().catch(()=>{}); } catch {}
+            playAlarm();
             return;
         }
         renderPomo();
@@ -374,6 +421,40 @@ function resetPomo() {
     pomoState.remaining = pomoState.total;
     renderPomo();
 }
+
+const hourInput = document.querySelector("#hours");
+const minuteInput = document.querySelector("#minutes");
+const secondInput = document.querySelector("#seconds");
+
+const saved = LS.get("pomodoro-duration", 25 * 60);
+
+hourInput.value = Math.floor(saved / 3600);
+minuteInput.value = Math.floor((saved % 3600) / 60);
+secondInput.value = saved % 60;
+
+// new Audio("alarm.mp3").play();  
+
+document
+    .querySelector("#applyTimer")
+    .addEventListener("click", () => {
+
+        const h = Number(hourInput.value);
+        const m = Number(minuteInput.value);
+        const s = Number(secondInput.value);
+        const total = (h * 3600) + (m * 60) + s;
+        if (total <= 0) {
+            alert("Please enter a valid duration.");
+            return;
+        }
+
+        pausePomo();
+        pomoState.total = total;
+        pomoState.remaining = total;
+        LS.set("pomodoro-duration", total);
+        renderPomo();
+
+    });
+
 renderPomo();
 document.querySelector("#pomoStart").addEventListener("click", startPomo);
 document.querySelector("#pomoPause").addEventListener("click", pausePomo);
@@ -382,9 +463,7 @@ document.querySelector("#wPomoPlay").addEventListener("click", startPomo);
 document.querySelector("#wPomoPause").addEventListener("click", pausePomo);
 document.querySelector("#wPomoReset").addEventListener("click", resetPomo);
 
-/* =========================================================
-   9. Motivation quotes (ZenQuotes via CORS proxy + fallback)
-   ========================================================= */
+// motivation quotes -- api se fetch, agar net issue ho to niche wala fallback array use hoga
 const FALLBACK_QUOTES = [
     { q: "Small daily improvements lead to stunning results.", a: "James Clear" },
     { q: "Discipline is the bridge between goals and accomplishment.", a: "Jim Rohn" },
@@ -401,17 +480,12 @@ function randomFallback() {
     return FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
 }
 async function fetchQuote() {
-    // ZenQuotes: has CORS issues from browsers; use allorigins proxy
     try {
-        const url = "https://api.allorigins.win/get?url=" + encodeURIComponent("https://zenquotes.io/api/random");
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error("bad");
-        const wrap = await res.json();
-        const data = JSON.parse(wrap.contents);
-        if (Array.isArray(data) && data[0] && data[0].q) {
-            return { q: data[0].q, a: data[0].a || "Unknown" };
-        }
-        throw new Error("bad shape");
+        const res = await fetch("https://dummyjson.com/quotes/random", { cache: "no-store" });
+        if (!res.ok) throw new Error("Failed");
+        const data = await res.json();
+        return { q: data.quote, a: data.author };
+
     } catch (err) {
         return randomFallback();
     }
@@ -430,12 +504,10 @@ async function loadMotivationQuote() {
     quoteAuthor.textContent = `— ${q.a}`;
 }
 document.querySelector("#motivRefresh").addEventListener("click", loadMotivationQuote);
-// initial home-banner quote
+// page load hote hi ek quote dikha do home pe
 loadMotivationQuote();
 
-/* =========================================================
-   10. Weather (Open-Meteo + Geolocation with Pune fallback)
-   ========================================================= */
+// weather section -- open-meteo api, location permission na mile to Pune default rahega
 const wxCache = LS.get("weather", null);
 const PUNE = { lat: 18.5204, lon: 73.8567, name: "Pune, Maharashtra" };
 const wTemp = document.querySelector("#wTemp");
@@ -476,7 +548,7 @@ async function reverseGeocode(lat, lon) {
             const g = j.results[0];
             return [g.name, g.admin1].filter(Boolean).join(", ");
         }
-    } catch {}
+    } catch { }
     return `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
 }
 async function fetchWeather(lat, lon) {
@@ -548,7 +620,7 @@ async function loadWeather(forceGeo = false) {
     updateWidgetWeather();
     renderWeatherView();
 
-    // 1. try cached last known location (unless forcing geolocation)
+    // pehle localStorage me last location cache dekhlo, fresh fetch se pehle
     const cached = LS.get("wx-loc", null);
     let lat, lon, name;
 
@@ -586,9 +658,7 @@ async function loadWeather(forceGeo = false) {
 loadWeather();
 document.querySelector("#weatherRefresh").addEventListener("click", () => loadWeather(true));
 
-/* =========================================================
-   Initial renders
-   ========================================================= */
+// page load hote hi sab render kardo ek baar
 renderTodos();
 renderGoals();
 updateStats();

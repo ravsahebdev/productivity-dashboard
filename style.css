@@ -1,11 +1,10 @@
-/* ---------- Theme tokens ---------- */
+/* dark theme ke color variables */
 :root {
     --font-display: "Plus Jakarta Sans", "Manrope", ui-sans-serif, system-ui, sans-serif;
     --font-body: "Manrope", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-
     --bg-0: #0b0d18;
     --bg-1: #10132155;
-    --panel: rgba(20, 22, 40, 0.55);
+    --panel: rgba(20, 22, 40, 0.448);
     --panel-strong: rgba(24, 26, 46, 0.78);
     --panel-hover: rgba(30, 34, 60, 0.75);
     --border: rgba(255, 255, 255, 0.08);
@@ -35,7 +34,7 @@
     --sidebar-w: clamp(220px, 17vw, 260px);
 }
 
-/* ---------- Light theme ---------- */
+/* light mode wale colors override yaha */
 html[data-theme="light"] {
     --bg-0: #f4f5fb;
     --panel: rgba(255, 255, 255, 0.916);
@@ -49,7 +48,139 @@ html[data-theme="light"] {
     --shadow-lg: 0 30px 80px -30px rgba(30, 30, 60, 0.2), 0 8px 24px -12px rgba(30, 30, 60, 0.12);
 }
 
-/* ---------- Reset ---------- */
+
+#welcomeOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.35), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(34, 211, 238, 0.28), transparent 55%),
+        rgba(8, 10, 20, 0.72);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    opacity: 1;
+    transition: opacity .35s ease, visibility .35s ease;
+}
+
+#welcomeOverlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#welcomeOverlay .welcome-card {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 26px;
+    padding: 42px 34px 34px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-align: center;
+    transform: translateY(0) scale(1);
+    animation: welcomePop .5s cubic-bezier(.2, .8, .2, 1);
+}
+
+@keyframes welcomePop {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+#welcomeOverlay .welcome-emoji {
+    font-size: 46px;
+    line-height: 1;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 6px 18px rgba(124, 92, 255, .5));
+}
+
+#welcomeOverlay h2 {
+    margin: 0 0 8px;
+    font-family: 'Plus Jakarta Sans', 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    color: #fff;
+    letter-spacing: -.02em;
+}
+
+#welcomeOverlay p {
+    margin: 0 0 26px;
+    font-size: 14.5px;
+    color: rgba(255, 255, 255, 0.65);
+    font-family: 'Manrope', sans-serif;
+}
+
+#welcomeOverlay .welcome-input-wrap {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+#welcomeOverlay input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 18px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    font-size: 15.5px;
+    font-family: 'Manrope', sans-serif;
+    outline: none;
+    transition: border-color .2s ease, background .2s ease;
+}
+
+#welcomeOverlay input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#welcomeOverlay input:focus {
+    border-color: #7c5cff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#welcomeOverlay .welcome-error {
+    min-height: 18px;
+    font-size: 12.5px;
+    color: #ff8080;
+    margin: -6px 0 12px;
+    font-family: 'Manrope', sans-serif;
+}
+
+#welcomeOverlay button {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 15px 18px;
+    border-radius: 14px;
+    font-size: 15.5px;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #fff;
+    background: linear-gradient(135deg, #7c5cff, #22d3ee);
+    box-shadow: 0 14px 30px -10px rgba(124, 92, 255, 0.65);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+#welcomeOverlay button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px -10px rgba(124, 92, 255, 0.8);
+}
+
+#welcomeOverlay button:active {
+    transform: translateY(0);
+}
+
+/* basic css reset */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -109,96 +240,33 @@ html[data-theme="light"] ::-webkit-scrollbar-thumb {
     background: rgba(20, 22, 40, 0.14);
 }
 
-/* =========================================================
-   Dynamic Background scene
-   ========================================================= */
-.bg-scene {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    transition: filter 600ms ease;
+/* subah/dopeher/shaam/raat ke hisab se bg colors */
+body.bg-morning {
+    background: url("morning.png") center/cover fixed no-repeat;
 }
 
-.bg-gradient {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, #1a1440 0%, #351a4b 30%, #6b2a4b 60%, #8b3a3a 85%, #b04a30 100%);
-    transition: background 900ms ease;
+body.bg-afternoon {
+    background: url("afternoon.png") center/cover fixed no-repeat;
 }
 
-.bg-mountains {
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 500' preserveAspectRatio='none'><path fill='%23110a20' opacity='0.72' d='M0 500 L0 340 L120 260 L220 320 L350 200 L470 280 L600 180 L740 260 L880 190 L1020 280 L1150 220 L1290 300 L1420 240 L1600 320 L1600 500 Z'/><path fill='%23070510' opacity='0.9' d='M0 500 L0 380 L100 340 L240 400 L360 340 L480 400 L620 340 L780 400 L920 360 L1060 400 L1200 350 L1360 400 L1500 360 L1600 400 L1600 500 Z'/></svg>");
-    background-position: bottom center;
-    background-size: 100% 60%;
-    background-repeat: no-repeat;
-    transition: opacity 600ms ease;
+body.bg-evening {
+    background: url("evening.png") center/cover fixed no-repeat;
 }
 
-.bg-sun {
-    position: absolute;
-    right: 26%;
-    bottom: 26%;
-    width: clamp(120px, 14vw, 220px);
-    height: clamp(120px, 14vw, 220px);
-    border-radius: 50%;
-    background: radial-gradient(circle at 50% 50%, #ffb680 0%, #f37034 55%, rgba(243, 112, 52, 0) 72%);
-    filter: blur(2px);
-    transition: opacity 700ms ease, transform 700ms ease;
+body.bg-night {
+    background: url("night.png") center/cover fixed no-repeat;
 }
 
-.bg-noise {
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    opacity: 0.25;
-    mix-blend-mode: overlay;
-    pointer-events: none;
+body.bg-rain {
+    background: url("rain.png") center/cover fixed no-repeat;
 }
 
-/* time-of-day palettes */
-body.bg-morning .bg-gradient {
-    background: linear-gradient(180deg, #0d1e3a 0%, #2f4f7a 40%, #f2a56d 80%, #ffd9a3 100%);
+body.bg-nature {
+    background: url("nature.png") center/cover fixed no-repeat;
 }
 
-body.bg-morning .bg-sun {
-    background: radial-gradient(circle at 50% 50%, #fff2c7 0%, #ffd06b 55%, rgba(255, 208, 107, 0) 72%);
-}
 
-body.bg-afternoon .bg-gradient {
-    background: linear-gradient(180deg, #1b2a55 0%, #3560a1 45%, #6ea3d6 85%, #a6cbe8 100%);
-}
-
-body.bg-afternoon .bg-sun {
-    top: 12%;
-    right: 14%;
-    bottom: auto;
-    background: radial-gradient(circle at 50% 50%, #fff8d6 0%, #ffe083 55%, rgba(255, 224, 131, 0) 72%);
-}
-
-body.bg-evening .bg-gradient {
-    background: linear-gradient(180deg, #1a1440 0%, #351a4b 30%, #6b2a4b 60%, #8b3a3a 85%, #b04a30 100%);
-}
-
-body.bg-night .bg-gradient {
-    background: linear-gradient(180deg, #05061a 0%, #0a1030 40%, #101a44 100%);
-}
-
-body.bg-night .bg-sun {
-    background: radial-gradient(circle at 50% 50%, #f7f0ff 0%, #bfb4ff 40%, rgba(191, 180, 255, 0) 72%);
-    opacity: 0.55;
-    width: clamp(80px, 9vw, 140px);
-    height: clamp(80px, 9vw, 140px);
-    top: 10%;
-    right: 22%;
-    bottom: auto;
-}
-
-/* =========================================================
-   App shell
-   ========================================================= */
+/* overall app ka layout - sidebar + main grid me */
 .app-shell {
     display: grid;
     grid-template-columns: var(--sidebar-w) 1fr;
@@ -207,9 +275,7 @@ body.bg-night .bg-sun {
     gap: 0;
 }
 
-/* =========================================================
-   Sidebar
-   ========================================================= */
+/* sidebar styling */
 .sidebar {
     position: relative;
     padding: clamp(16px, 1.6vw, 22px) clamp(14px, 1.2vw, 18px);
@@ -343,13 +409,15 @@ html[data-theme="light"] .nav-item:hover {
 }
 
 .toggle-track {
+    display: block;
     width: 40px;
     height: 22px;
-    background: rgba(124, 92, 255, 0.9);
+    background: linear-gradient(135deg, #7c5cff, #9c7bff);
     border-radius: 999px;
     position: relative;
     transition: background 220ms ease;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(124, 92, 255, 0.5);
 }
 
 .toggle-thumb {
@@ -361,9 +429,9 @@ html[data-theme="light"] .nav-item:hover {
     background: #fff;
     border-radius: 50%;
     transition: transform 240ms cubic-bezier(0.5, 1.4, 0.6, 1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
-
+ 
 html[data-theme="light"] .toggle-track {
     background: rgba(124, 92, 255, 0.85);
 }
@@ -406,9 +474,7 @@ html[data-theme="light"] .foot-btn:hover {
     background: rgba(20, 22, 40, 0.05);
 }
 
-/* =========================================================
-   Main content
-   ========================================================= */
+/* right side ka main content area */
 .main {
     padding: clamp(18px, 2vw, 30px) clamp(20px, 2.2vw, 34px);
     overflow-y: auto;
@@ -416,17 +482,18 @@ html[data-theme="light"] .foot-btn:hover {
     position: relative;
 }
 
-/* ---------- Glass ---------- */
+/* glassmorphism effect wale cards ke liye */
 .glass {
     background: var(--panel);
     backdrop-filter: blur(20px) saturate(140%);
     -webkit-backdrop-filter: blur(20px) saturate(140%);
+
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
 }
 
-/* ---------- Views ---------- */
+/* alag alag views ka show/hide logic */
 .view {
     display: none;
     animation: fadeIn 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -448,7 +515,7 @@ html[data-theme="light"] .foot-btn:hover {
     }
 }
 
-/* ---------- Top header ---------- */
+/* top wala header - date time greeting */
 .top-header {
     display: flex;
     justify-content: space-between;
@@ -465,6 +532,9 @@ html[data-theme="light"] .foot-btn:hover {
     letter-spacing: -0.03em;
     line-height: 1.05;
     color: #fff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.152);
+    -webkit-text-stroke: 0.6px rgba(0, 0, 0, 0.107);
+    paint-order: stroke;
 }
 
 html[data-theme="light"] .greet-title,
@@ -511,7 +581,10 @@ html[data-theme="light"] .greet-sub {
     margin-top: 8px;
     font-size: clamp(0.95rem, 1vw, 1.05rem);
     color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.404), 0 1px 3px rgba(0, 0, 0, 0.305);
     font-weight: 500;
+    -webkit-text-stroke: 0.6px rgba(0, 0, 0, 0.4);
+    paint-order: stroke;
 }
 
 .sparkle {
@@ -575,7 +648,7 @@ html[data-theme="light"] .greet-sub {
     border: 2px solid var(--bg-0);
 }
 
-/* ---------- Status grid ---------- */
+/* status cards ka grid */
 .status-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -675,7 +748,7 @@ html[data-theme="light"] .stat-progress {
     color: var(--accent-2);
 }
 
-/* ---------- Section title ---------- */
+/* section headings */
 .section-title {
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 1.2vw, 1.25rem);
@@ -685,7 +758,7 @@ html[data-theme="light"] .stat-progress {
     color: var(--text);
 }
 
-/* ---------- Quick Access grid ---------- */
+/* quick access cards grid */
 .quick-section {
     margin-bottom: clamp(18px, 1.8vw, 24px);
 }
@@ -757,7 +830,7 @@ html[data-theme="light"] .stat-progress {
     letter-spacing: -0.01em;
 }
 
-/* ---------- Widgets row ---------- */
+/* niche wali chhoti widgets */
 .widgets-row {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -865,11 +938,38 @@ html[data-theme="light"] .stat-progress {
 }
 
 .w-date {
-    font-size: 12px;
-    color: var(--text-mute);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
     margin-top: auto;
+    width: fit-content;
+    max-width: 100%;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(124, 92, 255, 0.18);
+    border: 1px solid rgba(124, 92, 255, 0.3);
+    border-radius: 10px;
 }
 
+.w-date::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    margin-top: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+}
+
+html[data-theme="light"] .w-date {
+    color: var(--accent);
+    background: rgba(124, 92, 255, 0.1);
+    border-color: rgba(124, 92, 255, 0.22);
+}
 .w-timer {
     font-family: var(--font-display);
     font-weight: 800;
@@ -942,54 +1042,42 @@ html[data-theme="light"] .w-btn-reset {
     cursor: pointer;
 }
 
-.bg-swatches {
-    display: flex;
-    gap: 8px;
-    margin-top: auto;
-    flex-wrap: wrap;
+.bg-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
 }
 
-.sw {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.14);
+.bg-thumb {
+    border: none;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
     cursor: pointer;
-    transition: transform 200ms ease, border-color 200ms ease;
+    transition: .3s;
 }
 
-.sw:hover {
-    transform: scale(1.1);
+.bg-thumb img {
+    width: 100%;
+    height: 32px;
+    object-fit: cover;
+    display: block;
 }
 
-.sw.active {
-    border-color: #fff;
-    box-shadow: 0 0 0 2px var(--accent);
+.bg-thumb:hover {
+    transform: scale(1.05);
 }
 
-.sw-morning {
-    background: linear-gradient(135deg, #f2a56d, #ffd9a3);
+.bg-thumb.active {
+    outline: 3px solid #8b5cf6;
 }
 
-.sw-afternoon {
-    background: linear-gradient(135deg, #3560a1, #a6cbe8);
-}
-
-.sw-evening {
-    background: linear-gradient(135deg, #6b2a4b, #b04a30);
-}
-
-.sw-night {
-    background: linear-gradient(135deg, #05061a, #101a44);
-}
-
-/* ---------- Quote banner ---------- */
+/* quote wala banner styling */
 .quote-banner {
     padding: clamp(14px, 1.3vw, 18px) clamp(20px, 2vw, 28px);
     display: flex;
     align-items: center;
     gap: 18px;
-    background: linear-gradient(135deg, rgba(124, 92, 255, 0.28) 0%, rgba(176, 112, 255, 0.18) 100%);
     border: 1px solid rgba(176, 112, 255, 0.28);
 }
 
@@ -1005,7 +1093,7 @@ html[data-theme="light"] .w-btn-reset {
     flex-shrink: 0;
 }
 
-html[data-theme=\"light\"] .q-mark {
+html[data-theme="light"] .q-mark {
     color: var(--accent);
     background: rgba(124, 92, 255, 0.14);
 }
@@ -1028,9 +1116,7 @@ html[data-theme=\"light\"] .q-mark {
     white-space: nowrap;
 }
 
-/* =========================================================
-   Feature views
-   ========================================================= */
+/* har feature ka individual page/view */
 .feature-head {
     display: flex;
     align-items: center;
@@ -1100,7 +1186,7 @@ html[data-theme=\"light\"] .q-mark {
     margin: 0 auto;
 }
 
-/* ---------- Buttons ---------- */
+/* button styles - primary aur ghost dono */
 .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -1153,7 +1239,7 @@ html[data-theme="light"] .btn-ghost:hover {
     background: rgba(20, 22, 40, 0.1);
 }
 
-/* ---------- Todo / Goals ---------- */
+/* todo list + goals dono same style share karte hai */
 .todo-form {
     display: flex;
     gap: 10px;
@@ -1339,7 +1425,7 @@ html[data-theme="light"] .progress-outer {
     transition: width 400ms ease;
 }
 
-/* ---------- Planner ---------- */
+/* daily planner grid */
 .planner-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -1387,19 +1473,21 @@ html[data-theme="light"] .planner-slot {
     color: var(--text-dim);
 }
 
-/* ---------- Pomodoro ---------- */
+/* pomodoro timer ka circular ring */
 .pomo-panel {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
-    padding: clamp(30px, 3vw, 50px);
+    gap: 26px;
+    padding: 30px clamp(40px, 4vw, 60px);
+    max-width: 720px;
+    margin: 0 auto;
 }
 
 .pomo-ring {
     position: relative;
-    width: clamp(220px, 26vw, 280px);
-    height: clamp(220px, 26vw, 280px);
+    width: clamp(160px, 18vw, 190px);
+    height: clamp(160px, 18vw, 190px);
 }
 
 .pomo-svg {
@@ -1435,7 +1523,7 @@ html[data-theme="light"] .pomo-track {
     place-items: center;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(2.6rem, 4vw, 3.4rem);
+    font-size: clamp(1.7rem, 2.6vw, 2.1rem);
     letter-spacing: -0.03em;
     color: var(--text);
 }
@@ -1444,23 +1532,107 @@ html[data-theme="light"] .pomo-track {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 26%;
+    bottom: 24%;
     text-align: center;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     color: var(--text-mute);
     text-transform: uppercase;
 }
 
 .pomo-controls {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-/* ---------- Motivation ---------- */
+.pomo-controls button {
+    padding: 9px 16px;
+    font-size: 13px;
+}
+
+/* neeche wala timer duration set karne wala form */
+
+.timer-settings {
+    width: 80%;
+    margin-top: 4px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .04);
+    backdrop-filter: blur(18px);
+}
+
+.timer-settings h3 {
+    font-size: 15px;
+    margin-bottom: 14px;
+    text-align: center;
+    color: var(--text);
+}
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.time-inputs div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.time-inputs label {
+    font-size: 12px;
+    color: var(--text-mute);
+    text-align: center;
+}
+
+.time-inputs input {
+    width: 100%;
+    padding: 9px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, .05);
+    color: var(--text);
+    text-align: center;
+    font-size: 15px;
+    outline: none;
+    transition: .25s;
+}
+
+.time-inputs input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(124, 92, 255, .15);
+}
+
+#applyTimer {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #7c5cff, #b070ff);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+#applyTimer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 15px rgba(125, 92, 255, 0.088);
+}
+
+#applyTimer:active {
+    transform: scale(.98);
+}
+
+/* motivation quote page */
 .motiv-panel {
     display: flex;
     flex-direction: column;
@@ -1487,7 +1659,7 @@ html[data-theme="light"] .pomo-track {
     font-weight: 700;
 }
 
-/* ---------- Weather panel ---------- */
+/* weather card styling */
 .weather-panel {
     padding: clamp(24px, 2.5vw, 40px);
 }
@@ -1592,7 +1764,7 @@ html[data-theme="light"] .wx-stat {
     color: var(--text);
 }
 
-/* ---------- Toast ---------- */
+/* toast notification */
 .toast {
     position: fixed;
     bottom: 20px;
@@ -1619,9 +1791,7 @@ html[data-theme="light"] .wx-stat {
     transform: translateX(-50%) translateY(0);
 }
 
-/* =========================================================
-   Responsive
-   ========================================================= */
+/* mobile/tablet ke liye media queries */
 @media (max-width: 1366px) {
     :root {
         --sidebar-w: 220px;
