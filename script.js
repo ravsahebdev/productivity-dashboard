@@ -107,6 +107,7 @@ function openMobileSidebar() {
     sidebarBackdrop.classList.add("active");
     document.body.classList.add("sidebar-locked");
     mobileMenuBtn.setAttribute("aria-expanded", "true");
+    mobileMenuBtn.classList.add("is-hidden"); // panel khulte hi hamburger chhupa do
 }
 
 function closeMobileSidebar() {
@@ -114,6 +115,7 @@ function closeMobileSidebar() {
     sidebarBackdrop.classList.remove("active");
     document.body.classList.remove("sidebar-locked");
     mobileMenuBtn.setAttribute("aria-expanded", "false");
+    mobileMenuBtn.classList.remove("is-hidden"); // panel band hote hi hamburger wapas dikhao
 }
 
 function toggleMobileSidebar() {

@@ -1976,7 +1976,14 @@ html[data-theme="light"] .wx-stat {
     border: 1px solid var(--border-strong);
     color: var(--text);
     box-shadow: var(--shadow-md);
-    transition: background 200ms ease, transform 200ms ease;
+    transition: background 200ms ease, transform 200ms ease, opacity 200ms ease, visibility 200ms ease;
+}
+
+/* sidebar panel khula ho tab hamburger gayab, band hote hi wapas aa jaye */
+.mobile-menu-btn.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .mobile-menu-btn i {
