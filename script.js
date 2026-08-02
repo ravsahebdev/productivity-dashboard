@@ -84,7 +84,10 @@ function showView(name) {
     if (name === "weather") renderWeatherView();
 }
 navBtns.forEach((el) => {
-    el.addEventListener("click", () => showView(el.dataset.view));
+    el.addEventListener("click", () => {
+        showView(el.dataset.view);
+        closeMobileSidebar(); // mobile par link dabate hi menu apne aap band ho jaye
+    });
     el.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showView(el.dataset.view); }
     });
@@ -92,6 +95,45 @@ navBtns.forEach((el) => {
 document.querySelectorAll("[data-back]").forEach((b) =>
     b.addEventListener("click", () => showView("home"))
 );
+
+// ---- mobile hamburger menu: sidebar ko side se slide in/out karta hai ----
+const sidebarEl = document.querySelector("#sidebar");
+const mobileMenuBtn = document.querySelector("#mobileMenuBtn");
+const sidebarBackdrop = document.querySelector("#sidebarBackdrop");
+const sidebarCloseBtn = document.querySelector("#sidebarCloseBtn");
+
+function openMobileSidebar() {
+    sidebarEl.classList.add("open");
+    sidebarBackdrop.classList.add("active");
+    document.body.classList.add("sidebar-locked");
+    mobileMenuBtn.setAttribute("aria-expanded", "true");
+}
+
+function closeMobileSidebar() {
+    sidebarEl.classList.remove("open");
+    sidebarBackdrop.classList.remove("active");
+    document.body.classList.remove("sidebar-locked");
+    mobileMenuBtn.setAttribute("aria-expanded", "false");
+}
+
+function toggleMobileSidebar() {
+    if (sidebarEl.classList.contains("open")) closeMobileSidebar();
+    else openMobileSidebar();
+}
+
+mobileMenuBtn?.addEventListener("click", toggleMobileSidebar);
+sidebarBackdrop?.addEventListener("click", closeMobileSidebar);
+sidebarCloseBtn?.addEventListener("click", closeMobileSidebar);
+
+// Escape dabane par bhi menu band ho jaye
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMobileSidebar();
+});
+
+// agar screen resize karke desktop size par le jaye to locked state reset kardo
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) closeMobileSidebar();
+});
 
 // clock update + greeting msg + time ke hisab se bg change -- sab yaha
 const headerDate = document.querySelector("#headerDate");

@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
         rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" />
     <link rel="stylesheet" href="style.css" /> 
 </head>
 
@@ -31,9 +32,19 @@
         </div>
     </div>
 
+    <!-- mobile ke liye hamburger button, sirf chhoti screen par dikhta hai -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false">
+        <i class="ri-menu-line"></i>
+    </button>
+    <!-- sidebar khulne par peeche dikhne wala dark overlay, tap karke band hoga -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
     <div class="app-shell">
         <!-- left sidebar - nav links + theme toggle -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close menu">
+                <i class="ri-close-line"></i>
+            </button>
             <div class="brand">
                 <div class="brand-logo">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
