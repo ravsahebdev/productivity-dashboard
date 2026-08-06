@@ -637,7 +637,7 @@ html[data-theme="light"] .greet-sub {
     place-items: center;
     color: #fff;
     font-weight: 800;
-    font-size: 17px;
+    font-size: 16.5px;
     border: 2px solid rgba(255, 255, 255, 0.15);
     box-shadow: var(--shadow-md);
     flex-shrink: 0;
